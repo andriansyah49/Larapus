@@ -26,7 +26,8 @@ class AuthorsController extends Controller
                     'confirm_message' => 'Yakin Mau Menghapus ' . $author->name.'?']);
             })->make(true);
         }
-        $html = $htmlBuilder->addColumn(['data' =>'name', 'name'=>'name', 'title'=>'Nama'])->addColumn(['data' => 'name', 'name'=>'name', 'title'=>'Nama'])->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'','orderable'=>false, 'searchable'=>false]);
+        $html = $htmlBuilder->addColumn(['data' =>'name', 'name'=>'name', 'title'=>'Nama'])
+            ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'','orderable'=>false, 'searchable'=>false]);
         return view('authors.index')->with(compact('html'));
     }
 
@@ -40,6 +41,7 @@ class AuthorsController extends Controller
     public function create()
     {
         //
+        return view('authors.create');
     }
 
     /**
@@ -51,6 +53,9 @@ class AuthorsController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,['name'=>'required|unique:authors']);
+        $author = Author::create($request->all());
+        return redirect()->route('authors.index');
     }
 
     /**

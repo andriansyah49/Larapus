@@ -33,7 +33,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/home') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
@@ -43,8 +43,10 @@
                     <ul class="nav navbar-nav">
                         @if (Auth::check())
                             <li><a href="{{url('/home')}}">Dashboard</a></li>
-                            <li><a href="{{ route('authors.index') }}">Penulis</a></li>
                         @endif
+                        @role('admin')
+                            <li><a href="{{ route('authors.index') }}">Penulis</a></li>
+                        @endrole
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -78,14 +80,15 @@
                 </div>
             </div>
         </nav>
+        @yield('content')
     </div>
-
+        
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap.min.js') }}"></script>
 
     @yield('scripts')
-    @yield('content')
+    
 </body>
 </html>
