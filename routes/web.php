@@ -19,3 +19,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/aa', ['middleware'=>'guest','uses'=>'MyController@myMethod'])->name('home');
+Route::group(['prefix'=>'admin','middleware'=>['auth']],function(){
+	Route::resource('authors','AuthorsController');
+});
