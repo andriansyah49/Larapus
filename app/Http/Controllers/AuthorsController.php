@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\Author;
 use Yajra\Datatables\Html\Builder;
 use Yajra\Datatables\Datatables;
@@ -55,6 +56,10 @@ class AuthorsController extends Controller
         //
         $this->validate($request,['name'=>'required|unique:authors']);
         $author = Author::create($request->all());
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil Menyimpan $author->name"
+            ]);
         return redirect()->route('authors.index');
     }
 
@@ -78,6 +83,8 @@ class AuthorsController extends Controller
     public function edit($id)
     {
         //
+        $author = Author::find($id);
+        return view('authors.edit')->with(compact('author'));
     }
 
     /**
@@ -90,6 +97,14 @@ class AuthorsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, ['name'=> 'required|unique:authors,name,'.$id]);
+        $author = Author::find($id);
+        $author->update($request->only('name'));
+        Session::flash("flash_notification",[
+            "level"=>"success",
+            "message"=>"Berhasil Menyimpan $author->name"
+            ]);
+        return redirect()->route('authors.index');
     }
 
     /**
@@ -101,5 +116,13 @@ class AuthorsController extends Controller
     public function destroy($id)
     {
         //
+        Author::destroy($id);
+        if(!Author::destroy($id)) return redirect()->back();
+
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Penulis Berhasil Dihapus"
+            ]);
+        return redirect()->route('authors.index');
     }
 }
