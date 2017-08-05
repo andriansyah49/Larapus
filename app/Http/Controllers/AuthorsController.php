@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Session;
-use App\Author;
+use Illuminate\Http\Request;
 use Yajra\Datatables\Html\Builder;
 use Yajra\Datatables\Datatables;
-use Illuminate\Http\Request;
+use App\Book;
+use Session;
+use File;
 
 class AuthorsController extends Controller
 {
@@ -116,7 +117,6 @@ class AuthorsController extends Controller
     public function destroy($id)
     {
         //
-        Author::destroy($id);
         if(!Author::destroy($id)) return redirect()->back();
 
         Session::flash("flash_notification", [
